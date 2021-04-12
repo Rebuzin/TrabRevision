@@ -1,2 +1,100 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+package br.unipar.revisao.poo;
+
+import java.util.Scanner;
+
+public class FiltroIndustrial {
+	double vazaoEntrada;
+	double quantidadeProduzidaSolidos, quantidadeEsperadaSolidos;
+	double percentualProduzidoSolidos, percentualEsperadoSolidos;
+	int pressao;
+	//**************************************** CALCULOS **************************************************
+	double calculatePercentualSolidosProduzido() {
+		calculateQuantidadeSolidosProduzida();
+		percentualProduzidoSolidos = quantidadeProduzidaSolidos/10;
+		return percentualProduzidoSolidos;
+	}
+	
+	void calculateQuantidadeSolidosProduzida() {
+		if (pressao > 0 && pressao < 25) {
+			quantidadeProduzidaSolidos = vazaoEntrada*0.3;
+		}
+		if (pressao >= 25 && pressao < 50) {
+			quantidadeProduzidaSolidos = vazaoEntrada*0.6;
+		}
+		if (pressao >= 50 && pressao < 75) {
+			quantidadeProduzidaSolidos = vazaoEntrada*0.8;
+		}
+		if (pressao >= 75 && pressao < 100) {
+			quantidadeProduzidaSolidos = vazaoEntrada*0.9;
+		}
+	}
+	
+	void aumentaPressao(){
+		pressao = pressao + 5;
+	}
+	
+	void reduzPressao() {
+		pressao = pressao - 5;
+	}
+	//-------------------------------------FIM CALCULATE -------------------------------------------------
+	
+	
+	//**************************** VERIFICAR O QUE FAZER *************************************************
+	void verify () {
+		calculatePercentualSolidosProduzido();
+		
+		if (pressao >= 100) {precisaParar(); return;}
+		if (percentualProduzidoSolidos == percentualEsperadoSolidos) {maquinaOK(); return;}
+		if (percentualProduzidoSolidos > percentualEsperadoSolidos) {precisaReduzirPressao(); return;}
+		if (percentualProduzidoSolidos < percentualEsperadoSolidos) {precisaAumentarPressao(); return;}
+	}
+	
+	void precisaParar() {
+		pressao = 0;
+		System.out.println("!!!A máquina precisa parar por conta da alta pressão!!!");
+		System.out.println("*Máquina Desliga*");
+		System.out.println("A configuração de pressão teve de ser reduzida à: " + pressao);
+		System.out.println("Por segurança, a máquina foi desligada e terá de esperar um pouco para reiniciar.");
+	}
+	
+	void precisaReduzirPressao() {
+		do {
+			reduzPressao();
+			calculatePercentualSolidosProduzido();
+		} while (percentualProduzidoSolidos > percentualEsperadoSolidos);
+		System.out.println("Altere a pressão para: " + pressao);
+	}
+	
+	void precisaAumentarPressao() {
+		do {
+			aumentaPressao();
+			calculatePercentualSolidosProduzido();
+		} while (percentualProduzidoSolidos < percentualEsperadoSolidos);
+		System.out.println("Altere a pressão para: " + pressao);
+	}
+	
+	void maquinaOK () {
+		System.out.println("A configuração de pressão já está adequada à indicação de hoje :)");
+	}
+	//---------------------------------- FIM VERIFY ------------------------------
+	
+	public static void main(String[] args) {
+		FiltroIndustrial maquina = new FiltroIndustrial();
+		
+		Scanner ps = new Scanner(System.in);
+		Scanner vE = new Scanner(System.in);
+		Scanner vS = new Scanner(System.in);
+		
+		System.out.println("Qual as indicações para hoje? Por favor, mostre a porcentagem de sólidos esperada: \n");
+		maquina.percentualEsperadoSolidos = ps.nextDouble();
+		
+		System.out.println("Qual a atual pressão da máquina? \n");
+		maquina.pressao = ps.nextInt();
+		
+		System.out.println("Qual a vazão atual de entrada da máquina? \n");
+		maquina.vazaoEntrada = vE.nextDouble();
+		
+		maquina.verify();
+	}
+	
+}
