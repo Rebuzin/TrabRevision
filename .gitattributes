@@ -7,7 +7,7 @@ public class FiltroIndustrial {
 	double quantidadeProduzidaSolidos, quantidadeEsperadaSolidos;
 	double percentualProduzidoSolidos, percentualEsperadoSolidos;
 	int pressao;
-	//**************************************** CALCULOS **************************************************
+	
 	double calculatePercentualSolidosProduzido() {
 		calculateQuantidadeSolidosProduzida();
 		percentualProduzidoSolidos = quantidadeProduzidaSolidos/10;
@@ -36,10 +36,8 @@ public class FiltroIndustrial {
 	void reduzPressao() {
 		pressao = pressao - 5;
 	}
-	//-------------------------------------FIM CALCULATE -------------------------------------------------
 	
 	
-	//**************************** VERIFICAR O QUE FAZER *************************************************
 	void verify () {
 		calculatePercentualSolidosProduzido();
 		
@@ -76,7 +74,6 @@ public class FiltroIndustrial {
 	void maquinaOK () {
 		System.out.println("A configuração de pressão já está adequada à indicação de hoje :)");
 	}
-	//---------------------------------- FIM VERIFY ------------------------------
 	
 	public static void main(String[] args) {
 		FiltroIndustrial maquina = new FiltroIndustrial();
